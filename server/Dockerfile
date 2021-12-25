@@ -1,8 +1,7 @@
 # Prod packages
 FROM composer:2.1.14 AS prod-composer
 
-COPY composer.json /app
-COPY composer.lock /app
+COPY composer.json composer.lock ./
 
 RUN composer install \
     --ignore-platform-reqs \
@@ -12,7 +11,14 @@ RUN composer install \
     --no-scripts \
     --no-dev
 
-COPY . /app/
+COPY app .
+COPY bootstrap .
+COPY database .
+COPY public .
+COPY resources .
+COPY routes .
+COPY storage .
+
 RUN composer dump-autoload --optimize --classmap-authoritative
 
 # Dev packages
@@ -25,6 +31,7 @@ RUN composer install \
     --no-interaction \
     --no-scripts
 
+COPY tests .
 RUN composer dump-autoload --optimize --classmap-authoritative
 
 # Prod setup
@@ -55,4 +62,4 @@ WORKDIR /var/www/public
 # Bring in dev composer
 FROM prod AS dev
 
-COPY --from=dev-composer /app/vendor /var/www/vendor
+COPY --from=dev-composer /app/vendor /opt/vendor

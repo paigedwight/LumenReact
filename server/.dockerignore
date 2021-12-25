@@ -1,0 +1,13 @@
+**
+
+!/app/**
+!/bootstrap/**
+!/database/**
+!/public/**
+!/resources/**
+!/routes/**
+!/storage/**
+!/tests/**
+!/composer*
+
+**/.git*
