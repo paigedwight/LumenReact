@@ -21,19 +21,6 @@ COPY storage .
 
 RUN composer dump-autoload --optimize --classmap-authoritative
 
-# Dev packages
-FROM prod-composer AS dev-composer
-
-RUN composer install \
-    --ignore-platform-reqs \
-    --no-ansi \
-    --no-autoloader \
-    --no-interaction \
-    --no-scripts
-
-COPY tests .
-RUN composer dump-autoload --optimize --classmap-authoritative
-
 # Prod setup
 FROM php:8.1-fpm-alpine AS prod
 
@@ -58,8 +45,3 @@ RUN addgroup -g 1000 -S www && \
 COPY --chown=www:www-data . .
 
 WORKDIR /var/www/public
-
-# Bring in dev composer
-FROM prod AS dev
-
-COPY --from=dev-composer /app/vendor /opt/vendor
