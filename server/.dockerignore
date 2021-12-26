@@ -1,4 +1,4 @@
-**
+*
 
 !/app/**
 !/bootstrap/**
@@ -9,5 +9,4 @@
 !/storage/**
 !/tests/**
 !/composer*
-
-**/.git*
+!/.docker*
