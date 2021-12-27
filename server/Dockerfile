@@ -32,7 +32,6 @@ RUN rm -rf /var/lib/apt/lists/* && rm -rf /var/cache/apk/*
 COPY --chown=www-data:www-data --from=prod-composer /app/vendor /var/www/vendor
 COPY --chown=www-data:www-data app bootstrap database public resources routes storage ./
 
-# check if this is doing anything
 WORKDIR /var/www/public
 
 ################################################################################
