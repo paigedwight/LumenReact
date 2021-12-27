@@ -2,7 +2,6 @@
 FROM composer:2.1.14 AS prod-composer
 
 COPY composer.json composer.lock ./
-
 RUN composer install \
     --ignore-platform-reqs \
     --no-ansi \
@@ -12,32 +11,34 @@ RUN composer install \
     --no-dev
 
 COPY . .
-
 RUN composer dump-autoload --optimize --classmap-authoritative
 
 ################################################################################
-# Prod setup
-FROM php:8.1-fpm-alpine AS prod
+FROM prod-composer AS dev-composer
 
-WORKDIR /var/www
+RUN composer install \
+    --ignore-platform-reqs \
+    --no-interaction \
+    --no-scripts
+
+################################################################################
+FROM php:8.1-fpm-alpine AS dependencies
 
 RUN apk add --no-cache \
     oniguruma-dev \
     libpq-dev
-
 RUN docker-php-ext-install mbstring pdo pdo_pgsql
-
 RUN rm -rf /var/lib/apt/lists/* && rm -rf /var/cache/apk/*
 
-COPY --chown=www-data:www-data --from=prod-composer /app/vendor /var/www/vendor
+WORKDIR /var/www
 COPY --chown=www-data:www-data app bootstrap database public resources routes storage ./
-
 WORKDIR /var/www/public
 
-################################################################################
-FROM prod AS dev
+# See if this can be more specific
+FROM dependencies AS dev
+RUN apk add --no-cache composer
+COPY --chown=www-data:www-data --from=dev-composer /app/vendor /var/www/vendor
 
-RUN apk update && apk add --no-cache \
-    composer
-
-ENTRYPOINT ["/var/www/.docker/docker-php-entrypoint.sh"]
+# Prod setup
+FROM dependencies AS prod
+COPY --chown=www-data:www-data --from=prod-composer /app/vendor /var/www/vendor

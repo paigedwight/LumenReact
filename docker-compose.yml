@@ -13,6 +13,7 @@ services:
   server:
     build:
       context: server
+      target: dev
     volumes:
       - ./server:/var/www:delegated
     networks:
