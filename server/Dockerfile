@@ -21,6 +21,12 @@ FROM php:8.1-fpm-alpine AS prod
 
 WORKDIR /var/www
 
+RUN apk add --no-cache \
+    oniguruma-dev \
+    libpq-dev
+
+RUN docker-php-ext-install mbstring pdo pdo_pgsql
+
 RUN rm -rf /var/lib/apt/lists/* && rm -rf /var/cache/apk/*
 
 COPY --chown=www-data:www-data --from=prod-composer /app/vendor /var/www/vendor
