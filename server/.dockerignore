@@ -9,4 +9,4 @@
 !/storage/**
 !/tests/**
 !/composer*
-!/.docker*
+!/.docker/**

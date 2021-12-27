@@ -1,0 +1,13 @@
+*
+
+!/package*.json
+!/pages/**
+!/public/**
+!/styles/**
+!/next-env.d.ts
+!/next.config.js
+!/tsconfig.json
+!/.eslintrc.json
+!/.babelrc
+!/.next/**
+!/.docker/**

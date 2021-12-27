@@ -14,5 +14,5 @@
 */
 
 $router->get('/api', function () use ($router) {
-    return $router->app->version();
+    return response()->json(['version' => $router->app->version()]);
 });

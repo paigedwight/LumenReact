@@ -40,4 +40,4 @@ FROM prod AS dev
 RUN apk update && apk add --no-cache \
     composer
 
-ENTRYPOINT [ "/var/www/.docker/docker-php-entrypoint.sh" ]
+ENTRYPOINT ["/var/www/.docker/docker-php-entrypoint.sh"]

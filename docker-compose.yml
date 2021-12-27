@@ -4,9 +4,10 @@ services:
   nginx:
     build:
       context: nginx
-    ports:
-      - "8080:80"
     depends_on:
+      - server
+    networks:
+      - nginx
       - server
 
   server:
@@ -14,3 +15,22 @@ services:
       context: server
     volumes:
       - ./server:/var/www:delegated
+    networks:
+      - server
+
+  web:
+    build:
+      context: web
+      target: dev
+    volumes:
+      - ./web:/usr/src/app:delegated
+    ports:
+      - "3000:3000"
+    networks:
+      - nginx
+      - web
+
+networks:
+  server:
+  web:
+  nginx:
