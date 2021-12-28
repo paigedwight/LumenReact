@@ -36,7 +36,9 @@ WORKDIR /var/www/public
 
 # See if this can be more specific
 FROM dependencies AS dev
-RUN apk add --no-cache composer
+RUN curl -sS https://getcomposer.org/installer -o composer-setup.php && \
+    php composer-setup.php --install-dir=/usr/local/bin --filename=composer && \
+    rm -rf composer-setup.php
 COPY --chown=www-data:www-data --from=dev-composer /app/vendor /var/www/vendor
 
 # Prod setup

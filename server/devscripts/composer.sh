@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -ex
+set -e
 
 declare repoDir="$(git rev-parse --show-toplevel)"
 declare image="$(docker build --target dev -q "${repoDir}/server")"
